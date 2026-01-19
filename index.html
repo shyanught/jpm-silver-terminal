@@ -3,41 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JPM Silver Strategy Terminal v8.8</title>
+    <title>JPM Silver Strategy Terminal v9.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background: radial-gradient(circle at top right, #1e293b, #0f172a); min-height: 100vh; color: #f1f5f9; }
-        .module-card { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(71, 85, 105, 0.5); border-radius: 20px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); }
-        .input-group { display: flex; align-items: center; margin-bottom: 1rem; }
+        .module-card { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(71, 85, 105, 0.5); border-radius: 20px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); transition: transform 0.3s; }
+        .module-card:hover { transform: translateY(-5px); }
+        .input-group { display: flex; align-items: center; margin-bottom: 0.8rem; }
         .label-text { width: 45%; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; }
-        .input-control { width: 55%; background: #020617; border: 1px solid #334155; color: #3b82f6; padding: 8px 12px; border-radius: 10px; font-family: 'JetBrains Mono', monospace; outline: none; transition: all 0.3s; }
-        .input-control:focus { border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); color: #fff; }
+        .input-control { width: 55%; background: #020617; border: 1px solid #334155; color: #3b82f6; padding: 6px 10px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; outline: none; font-size: 0.8rem; }
+        .input-control:focus { border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); color: #fff; }
         
-        .lang-switch-container { display: flex; align-items: center; gap: 10px; background: #020617; padding: 4px; border-radius: 12px; border: 1px solid #334155; }
-        .lang-toggle-btn { padding: 6px 12px; border-radius: 8px; font-size: 10px; font-weight: 900; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
-        .lang-toggle-btn.active { background: #3b82f6; color: white; box-shadow: 0 0 12px rgba(59, 130, 246, 0.5); }
+        .lang-switch-container { display: flex; align-items: center; gap: 8px; background: #020617; padding: 4px; border-radius: 12px; border: 1px solid #334155; }
+        .lang-toggle-btn { padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 900; transition: all 0.3s; cursor: pointer; }
+        .lang-toggle-btn.active { background: #3b82f6; color: white; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
         .lang-toggle-btn:not(.active) { color: #475569; }
 
         .nav-link { @apply bg-slate-900 border border-slate-700 text-slate-400 px-3 py-2 rounded-lg text-[9px] font-bold uppercase hover:bg-blue-600 hover:text-white transition-all text-center flex items-center justify-center; }
         .result-box { @apply mt-4 pt-4 border-t border-slate-700/50 text-center; }
         .status-badge { @apply text-lg font-mono mt-1 transition-all duration-500; }
-        .save-note { position: fixed; bottom: 20px; right: 20px; font-size: 10px; color: #475569; font-family: 'JetBrains Mono', monospace; opacity: 0.5; }
+        .time-label { @apply text-[9px] text-slate-500 mt-2 block font-mono italic; }
     </style>
 </head>
 <body class="p-4 md:p-12">
 
     <div class="max-w-6xl mx-auto">
-        <div class="flex flex-col lg:flex-row justify-between items-center mb-10 gap-6">
+        <div class="flex flex-col lg:flex-row justify-between items-center mb-8 gap-6">
             <div class="text-center lg:text-left">
                 <div class="flex items-center gap-6 justify-center lg:justify-start mb-2">
-                    <h1 class="text-4xl font-black italic tracking-tighter text-white">JPM <span class="text-blue-500 font-black">TERMINAL</span></h1>
+                    <h1 class="text-4xl font-black italic tracking-tighter text-white">JPM <span class="text-blue-500">TERMINAL</span></h1>
                     <div class="lang-switch-container">
                         <div onclick="setLang('cn')" id="btn-cn" class="lang-toggle-btn active">中文</div>
                         <div onclick="setLang('en')" id="btn-en" class="lang-toggle-btn">EN</div>
                     </div>
                 </div>
-                <p id="sub-title" class="text-slate-500 text-[10px] font-mono uppercase tracking-[0.3em]">Institutional Strategy v8.8 Persistent</p>
+                <p id="sub-title" class="text-slate-500 text-[10px] font-mono uppercase tracking-[0.3em]">Institutional Strategy v9.0 Pro</p>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 w-full lg:w-auto">
                 <a href="https://www.barchart.com/futures/commitment-of-traders/technical-charts/SI*0" target="_blank" class="nav-link">📊 COT Data</a>
@@ -47,82 +48,91 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
             <div class="module-card">
-                <div id="t1-head" class="text-blue-500 text-[10px] font-black uppercase mb-6 tracking-widest">01. COT Positions</div>
+                <div id="t1-head" class="text-blue-500 text-[10px] font-black uppercase mb-4 tracking-widest">01. COT Positions</div>
                 <div class="input-group"><span id="t1-l1" class="label-text">Long Pos</span><input type="number" id="cotLong" class="input-control" oninput="saveAndCalc()"></div>
                 <div class="input-group"><span id="t1-l2" class="label-text">Short Pos</span><input type="number" id="cotShort" class="input-control" oninput="saveAndCalc()"></div>
+                <div class="input-group"><span class="label-text">Report Date</span><input type="date" id="cotDate" class="input-control" oninput="saveAndCalc()"></div>
                 <div class="result-box">
                     <span id="t1-res" class="text-[9px] text-slate-500 font-bold uppercase">Net Position</span>
                     <div id="cotResult" class="status-badge text-slate-400">---</div>
+                    <span id="cotTimeDisp" class="time-label">Updated: --</span>
                 </div>
             </div>
 
             <div class="module-card">
-                <div id="t2-head" class="text-amber-500 text-[10px] font-black uppercase mb-6 tracking-widest">02. Basis Analysis</div>
+                <div id="t2-head" class="text-amber-500 text-[10px] font-black uppercase mb-4 tracking-widest">02. Basis Analysis</div>
                 <div class="input-group"><span id="t2-l1" class="label-text">XAG Spot</span><input type="number" step="0.0001" id="spotPrice" class="input-control" oninput="saveAndCalc()"></div>
                 <div class="input-group"><span id="t2-l2" class="label-text">SI Futures</span><input type="number" step="0.0001" id="futuresPrice" class="input-control" oninput="saveAndCalc()"></div>
+                <div class="input-group"><span class="label-text">Update Time</span><input type="time" id="basisTime" class="input-control" oninput="saveAndCalc()"></div>
                 <div class="result-box">
                     <span id="t2-res" class="text-[9px] text-slate-500 font-bold uppercase">Premium Level</span>
                     <div id="basisResult" class="status-badge text-slate-400">---</div>
+                    <span id="basisTimeDisp" class="time-label">Synced: --</span>
                 </div>
             </div>
 
             <div class="module-card">
-                <div id="t3-head" class="text-emerald-500 text-[10px] font-black uppercase mb-6 tracking-widest">03. Vault Monitor (JPM)</div>
-                <div class="input-group"><span class="label-text">Adjustment</span><input type="number" id="vAdj" class="input-control" placeholder="Reg Adj" oninput="saveAndCalc()"></div>
+                <div id="t3-head" class="text-emerald-500 text-[10px] font-black uppercase mb-4 tracking-widest">03. Vault Monitor (JPM/Total)</div>
+                <div class="input-group"><span class="label-text">Adjustment</span><input type="number" id="vAdj" class="input-control" placeholder="Registered Adj" oninput="saveAndCalc()"></div>
                 <div class="input-group"><span class="label-text">Withdrawn</span><input type="number" id="vWit" class="input-control" oninput="saveAndCalc()"></div>
-                <div class="input-group"><span class="label-text">Total Today</span><input type="number" id="vTotal" class="input-control" oninput="saveAndCalc()"></div>
+                <div class="input-group"><span class="label-text">Total Stocks</span><input type="number" id="vTotal" class="input-control" oninput="saveAndCalc()"></div>
+                <div class="input-group"><span class="label-text">CME Date</span><input type="date" id="vaultDate" class="input-control" oninput="saveAndCalc()"></div>
                 <div class="result-box">
                     <span id="t3-res" class="text-[9px] text-slate-500 font-bold uppercase">Vault Status</span>
                     <div id="vaultResult" class="status-badge text-slate-400">---</div>
+                    <span id="vaultTimeDisp" class="time-label">Report: --</span>
                 </div>
             </div>
         </div>
 
-        <div class="bg-slate-900 border-l-8 border-blue-600 p-8 rounded-r-3xl shadow-2xl relative">
+        <div class="bg-slate-900 border-l-8 border-blue-600 p-8 rounded-r-3xl shadow-2xl relative mb-8">
             <div class="flex flex-col md:flex-row gap-8 items-center">
-                <div id="indicator" class="w-20 h-20 bg-slate-800 rounded-2xl flex items-center justify-center text-3xl border border-slate-700">📡</div>
+                <div id="indicator" class="w-20 h-20 bg-slate-800 rounded-2xl flex items-center justify-center text-3xl border border-slate-700 shadow-inner">📡</div>
                 <div class="flex-1 space-y-2">
                     <h4 id="diag-head" class="text-blue-500 text-[10px] font-black uppercase tracking-[0.2em]">Strategy AI Core Diagnostic</h4>
                     <div id="finalAnalysis" class="text-2xl font-bold text-slate-300 leading-tight">AWAITING DATA...</div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="save-note">AUTO-SAVE ENABLED (LOCAL STORAGE)</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 opacity-40 hover:opacity-100 transition-opacity">
+            <div class="text-[10px] font-mono text-slate-500 border border-slate-800 p-3 rounded-lg">
+                ● COT Update: Every Friday 15:30 EST (Weekly) <br>
+                ● 報告頻率：每週六凌晨更新，數據滯後 3 天。
+            </div>
+            <div class="text-[10px] font-mono text-slate-500 border border-slate-800 p-3 rounded-lg">
+                ● CME Vault: Daily after 15:00 EST <br>
+                ● 報告頻率：每個工作日更新，實體市場領先指標。
+            </div>
+        </div>
+    </div>
 
     <script>
         let currentLang = 'cn';
         const i18n = {
             cn: {
-                init: "系統就緒，請輸入數據...",
-                msgSqueeze: "🚀 <span class='text-blue-400'>極端警告：</span>現貨高溢價 + 金庫鎖倉。軋空行情啟動中！",
-                msgOutflow: "🚨 <span class='text-red-500'>實體擠兌：</span>金庫單日提貨超百萬盎司，現貨供應面臨斷裂！",
+                msgSqueeze: "🚀 <span class='text-blue-400'>極端警告：</span>高溢價 + 鎖倉。軋空啟動！",
+                msgOutflow: "🚨 <span class='text-red-500'>實體擠兌：</span>金庫單日提貨巨大，供應斷裂！",
                 msgNeutral: "市場盤整。現貨溢價目前為 $",
                 lock: "鎖倉蓄勢", outflow: "實體失血", pHigh: " (極端溢價)", pNormal: " (正常)"
             },
             en: {
-                init: "SYSTEM ONLINE. AWAITING DATA...",
-                msgSqueeze: "🚀 <span class='text-blue-400'>STRATEGIC SQUEEZE:</span> HIGH PREMIUM + LOCKING. BULLISH SURGE!",
-                msgOutflow: "🚨 <span class='text-red-500'>VAULT RUN:</span> MASSIVE WITHDRAWAL DETECTED. PHYSICAL SHORTAGE!",
+                msgSqueeze: "🚀 <span class='text-blue-400'>STRATEGIC SQUEEZE:</span> HIGH PREMIUM + LOCKING!",
+                msgOutflow: "🚨 <span class='text-red-500'>VAULT RUN:</span> MASSIVE WITHDRAWAL. SHORTAGE!",
                 msgNeutral: "CONSOLIDATING. BASIS AT $",
                 lock: "LOCKING", outflow: "OUTFLOW", pHigh: " (EXTREME)", pNormal: " (NORMAL)"
             }
         };
 
-        // 初始化：從 localStorage 載入數據
         window.onload = function() {
-            const savedData = JSON.parse(localStorage.getItem('jpmTerminalData'));
+            const savedData = JSON.parse(localStorage.getItem('jpmTerminalV9'));
             if (savedData) {
-                document.getElementById('cotLong').value = savedData.cotLong || "";
-                document.getElementById('cotShort').value = savedData.cotShort || "";
-                document.getElementById('spotPrice').value = savedData.spotPrice || "";
-                document.getElementById('futuresPrice').value = savedData.futuresPrice || "";
-                document.getElementById('vAdj').value = savedData.vAdj || "";
-                document.getElementById('vWit').value = savedData.vWit || "";
-                document.getElementById('vTotal').value = savedData.vTotal || "";
+                Object.keys(savedData).forEach(key => {
+                    const el = document.getElementById(key);
+                    if (el) el.value = savedData[key];
+                });
                 currentLang = savedData.lang || 'cn';
             }
             setLang(currentLang);
@@ -136,20 +146,16 @@
         }
 
         function saveAndCalc() {
-            // 儲存到 localStorage
-            const dataToSave = {
-                cotLong: document.getElementById('cotLong').value,
-                cotShort: document.getElementById('cotShort').value,
-                spotPrice: document.getElementById('spotPrice').value,
-                futuresPrice: document.getElementById('futuresPrice').value,
-                vAdj: document.getElementById('vAdj').value,
-                vWit: document.getElementById('vWit').value,
-                vTotal: document.getElementById('vTotal').value,
-                lang: currentLang
-            };
-            localStorage.setItem('jpmTerminalData', JSON.stringify(dataToSave));
+            const fields = ['cotLong', 'cotShort', 'cotDate', 'spotPrice', 'futuresPrice', 'basisTime', 'vAdj', 'vWit', 'vTotal', 'vaultDate'];
+            const dataToSave = { lang: currentLang };
+            fields.forEach(f => dataToSave[f] = document.getElementById(f).value);
+            localStorage.setItem('jpmTerminalV9', JSON.stringify(dataToSave));
 
-            // 執行原本的計算邏輯
+            // 更新時間顯示
+            document.getElementById('cotTimeDisp').innerText = "Updated: " + (dataToSave.cotDate || "--");
+            document.getElementById('basisTimeDisp').innerText = "Synced: " + (dataToSave.basisTime || "--");
+            document.getElementById('vaultTimeDisp').innerText = "Report: " + (dataToSave.vaultDate || "--");
+
             calculate();
         }
 
@@ -157,8 +163,9 @@
             const cl = parseFloat(document.getElementById('cotLong').value) || 0;
             const cs = parseFloat(document.getElementById('cotShort').value) || 0;
             const net = cl - cs;
-            document.getElementById('cotResult').innerText = cl ? net.toLocaleString() : "---";
-            document.getElementById('cotResult').style.color = net < -30000 ? '#ef4444' : '#3b82f6';
+            const cotDiv = document.getElementById('cotResult');
+            cotDiv.innerText = cl ? net.toLocaleString() : "---";
+            cotDiv.style.color = net < -30000 ? '#ef4444' : '#3b82f6';
 
             const sp = parseFloat(document.getElementById('spotPrice').value) || 0;
             const fp = parseFloat(document.getElementById('futuresPrice').value) || 0;
@@ -168,7 +175,6 @@
                 let pText = diff > 1.0 ? i18n[currentLang].pHigh : i18n[currentLang].pNormal;
                 basisDiv.innerText = `$${diff.toFixed(2)}${pText}`;
                 basisDiv.style.color = diff > 1.0 ? '#fbbf24' : '#94a3b8';
-                if (diff > 1.0) basisDiv.classList.add('animate-pulse'); else basisDiv.classList.remove('animate-pulse');
             } else { basisDiv.innerText = "---"; }
 
             const adj = parseFloat(document.getElementById('vAdj').value) || 0;
@@ -190,7 +196,7 @@
 
             const analysis = document.getElementById('finalAnalysis');
             const indicator = document.getElementById('indicator');
-            if (!cl || !sp) { analysis.innerHTML = i18n[currentLang].init; return; }
+            if (!cl || !sp) return;
 
             if (wit > 1000000) {
                 analysis.innerHTML = i18n[currentLang].msgOutflow; indicator.innerText = "🔥";
